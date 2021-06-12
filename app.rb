@@ -16,14 +16,14 @@ configure do
   init_db
   @db.execute 'CREATE TABLE IF NOT EXISTS Posts
    (
-     id integer PRIMARY KEY AUTOINCREMENT UNIQUE,
-     "created_date" date,
+     id integer PRIMARY KEY AUTOINCREMENT,
+     created_date date,
      content text
    )'
 end
 
 get '/' do
-  results = @db.execute 'select * from posts order by id desc'
+  results = @db.execute 'select * from Posts order by id desc'
 
   erb :index
 end
@@ -42,7 +42,8 @@ post '/new' do
 
   @db.execute 'insert into Posts (content, created_date) values ( ?, datetime())', [content]
 
-  erb "You typed #{content}"
+  redirect to '/'
+
 end
 
 configure do
