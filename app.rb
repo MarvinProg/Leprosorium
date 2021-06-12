@@ -23,7 +23,7 @@ configure do
 end
 
 get '/' do
-  results = @db.execute 'select * from Posts order by id desc'
+  @results = @db.execute 'select * from Posts order by id desc'
 
   erb :index
 end
@@ -45,10 +45,13 @@ post '/new' do
   redirect to '/'
 end
 
-get '/details/:id'  do
+get '/details/:post_id'  do
   post_id = params[:post_id]
 
-  erb "Displaying information for post with id #{post_id}"    
+  @results = @db.execute 'select * from Posts where id = ?', [post_id]
+  @row = @results[0]
+
+  erb :details  
 end
 
 configure do
